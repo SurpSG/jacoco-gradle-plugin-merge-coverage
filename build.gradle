@@ -1,0 +1,43 @@
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    sourceCompatibility = 1.8
+
+    dependencies {
+        testImplementation 'junit:junit:4.12'
+    }
+
+    jacocoTestReport {
+        reports {
+            html.enabled true
+        }
+    }
+}
+
+
+task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
+    description = 'Generates an aggregate report from all subprojects'
+    dependsOn(subprojects.test)
+
+    additionalSourceDirs.from = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from = files(subprojects.sourceSets.main.output)
+    executionData.from = files(subprojects.jacocoTestReport.executionData)
+
+    reports {
+        html.enabled = true
+    }
+}
