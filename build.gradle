@@ -1,13 +1,13 @@
-
-apply plugin: 'java'
-apply plugin: 'jacoco'
+plugins {
+    id 'java'
+    id 'jacoco'
+}
 
 group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 subprojects {
@@ -16,14 +16,12 @@ subprojects {
 
     sourceCompatibility = 1.8
 
-    dependencies {
-        testImplementation 'junit:junit:4.12'
+    repositories {
+        mavenCentral()
     }
 
-    jacocoTestReport {
-        reports {
-            html.enabled true
-        }
+    dependencies {
+        testImplementation 'junit:junit:4.13.2'
     }
 }
 
@@ -38,6 +36,6 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     executionData.from = files(subprojects.jacocoTestReport.executionData)
 
     reports {
-        html.enabled = true
+        html.enabled true
     }
 }
